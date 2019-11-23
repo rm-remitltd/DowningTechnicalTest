@@ -31,6 +31,8 @@ namespace UITests.Features
         public void GivenTheDashboardIsDisplayed()
         {
             var dashBoard = Retrieve<DashboardPage>();
+
+            Assert.That(dashBoard.Displayed, Is.True, "Dashboard page not displayed.");
         }
 
         [Given(@"the investor has elected to maintain their profile")]

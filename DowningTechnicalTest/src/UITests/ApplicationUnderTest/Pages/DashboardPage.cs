@@ -39,6 +39,8 @@ namespace UITests.ApplicationUnderTest.Pages
             return element;
         }
 
+        public bool Displayed => Driver.Url.Contains("dashboard");
+
         public ProfilePage Profile()
         {
             DismissWelcomeMessage();
