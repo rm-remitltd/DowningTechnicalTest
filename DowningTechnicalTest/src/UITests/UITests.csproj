@@ -126,6 +126,7 @@
     <Compile Include="ApplicationUnderTest\Pages\Profile\AddressSection.cs" />
     <Compile Include="ApplicationUnderTest\Pages\Profile\PersonalDetailsSection.cs" />
     <Compile Include="ApplicationUnderTest\Pages\Profile\ProfilePage.cs" />
+    <Compile Include="ApplicationUnderTest\TestData\Investors.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Features\MaintainPersonalDetailsSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

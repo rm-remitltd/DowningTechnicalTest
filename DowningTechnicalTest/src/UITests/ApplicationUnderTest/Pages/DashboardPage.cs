@@ -23,6 +23,8 @@ namespace UITests.ApplicationUnderTest.Pages
                 .FindElement(By.ClassName("dropdown-menu"))
                 .FindElements(By.TagName("li"));
 
+        private By WelcomeMessageModal => By.Id("welcome-msg");
+
         #endregion
 
         private bool Expanded(IWebElement element) => element.GetAttribute("aria-expanded") == "true";
@@ -39,6 +41,8 @@ namespace UITests.ApplicationUnderTest.Pages
 
         public ProfilePage Profile()
         {
+            DismissWelcomeMessage();
+
             HoverOver(AccountDropDownElement);
 
             var profileItem = AccountDropDownItems.Single(e => e.Text == "Profile settings");
@@ -49,5 +53,24 @@ namespace UITests.ApplicationUnderTest.Pages
 
             return new ProfilePage(Driver, BaseUrl);
         }
+
+        private void DismissWelcomeMessage()
+        {
+            var welcomeMessageModal = Driver.FindElements(WelcomeMessageModal).FirstOrDefault();
+
+            if (welcomeMessageModal == null) return;
+
+            if (!welcomeMessageModal.Displayed) return;
+
+            var closeButton = welcomeMessageModal.FindElement(By.CssSelector(@"button[aria-label=""Close""]"));
+
+            closeButton.Click();
+
+            WaitUntilHidden(WelcomeMessageModal);
+        }
+
+        private bool WaitUntilHidden(By element)
+            => new WebDriverWait(Driver, TimeSpan.FromSeconds(2))
+                .Until(drv => !drv.FindElement(element).Displayed);
     }
 }

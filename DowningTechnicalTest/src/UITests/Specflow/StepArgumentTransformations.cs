@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using UITests.ApplicationUnderTest.Models;
@@ -35,5 +37,9 @@ namespace UITests.Specflow
 
             return address;
         }
+
+        [StepArgumentTransformation]
+        public IEnumerable<string> MapTableToErrorStrings(Table table)
+            => table.Rows.Select(tr => tr["Expected Error"]).ToList();
     }
 }

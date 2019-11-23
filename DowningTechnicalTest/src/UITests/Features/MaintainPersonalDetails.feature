@@ -26,3 +26,19 @@ Scenario: Investor omits mandatory data and is prompted accordingly
 		| Phone number is required                         |
 		| Valid three years of address history is required |
 	
+Scenario: Investor does not meet minimum age requirement
+	Given the investor has elected to maintain their profile
+	When they supply a date of birth that makes them 17 years and 11 months old
+	Then the investor will be prompted about the following issues
+		| Expected Error                             |
+		| Should there be an error if <18 years old? |
+
+Scenario Outline: Investor meets minium age requirement
+	Given the investor has elected to maintain their profile
+	When they supply a date of birth that makes them <years> years and <months> months old
+	Then investors profile will be updated with no errors
+	
+	Examples:
+	| years | months |
+	| 18    | 0      |
+	| 18    | 1      |

@@ -1,9 +1,11 @@
 ﻿using NUnit.Framework;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using UITests.ApplicationUnderTest.Models;
 using UITests.ApplicationUnderTest.Pages;
 using UITests.ApplicationUnderTest.Pages.Profile;
+using UITests.ApplicationUnderTest.TestData;
 using UITests.Specflow;
 
 namespace UITests.Features
@@ -59,6 +61,21 @@ namespace UITests.Features
             personalDetails.Save();
         }
 
+        [When(@"they supply a date of birth that makes them (.*) years and (.*) months old")]
+        public void WhenTheySupplyADateOfBirthThatMakesThemYearsOld(int years, int months)
+        {
+            var mrTest = Investors.MrTest;
+            mrTest.DateOfBirth = CalculateDoB(years, months);
+
+            var personalDetails = Retrieve<PersonalDetailsSection>();
+
+            personalDetails.Enter(mrTest);
+
+            personalDetails.Save();
+        }
+
+        private DateTime CalculateDoB(int years, int months) 
+            => DateTime.Today.AddMonths(-months).AddYears(-years);
 
         [Then(@"investors profile will be updated with no errors")]
         public void ThenInvestorsProfileWillBeUpdatedWithNoErrors()
@@ -69,10 +86,8 @@ namespace UITests.Features
         }
 
         [Then(@"the investor will be prompted about the following issues")]
-        public void ThenTheInvestorWillBePromptedAboutTheFollowingIssues(Table errorsTable)
+        public void ThenTheInvestorWillBePromptedAboutTheFollowingIssues(IEnumerable<string> expectedErrors)
         {
-            var expectedErrors = errorsTable.Rows.Select(tr => tr["Expected Error"]).ToList();
-
             var personalDetails = Retrieve<PersonalDetailsSection>();
 
             Assert.That(personalDetails.Errors, Is.EquivalentTo(expectedErrors));
